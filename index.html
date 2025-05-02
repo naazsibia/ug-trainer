@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandas for Research Assistants</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <!-- Prism.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 1rem; line-height: 1.6; background: #fefefe; color: #333; }
+    nav a { margin-right: 1rem; color: #0366d6; text-decoration: none; }
+    section { margin-top: 2rem; }
+    pre { background: #2d2d2d; padding: 1rem; overflow-x: auto; white-space: pre; line-height: 1.5; margin-bottom: 1rem; border-radius: 4px; }
+    code:not([class]) { background: #f6f8fa; padding: 0.2rem 0.4rem; border-radius: 3px; }
+    ul { margin-top: 0.5rem; padding-left: 1.2rem; }
+    iframe { border: none; margin-top: 0.5rem; }
+    button { padding: 0.5rem 1rem; margin: 0.5rem 0; font-size: 1rem; cursor: pointer; }
+    h2 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+  <h1>Pandas for Research Assistants</h1>
+  <nav id="nav"></nav>
+  <main id="content"></main>
+  <footer>
+    <p>Hosted on GitHub Pages at naazsibia.github.io/pandas-tutorial</code></p>
+  </footer>
+
+  <!-- Prism.js core + Python component -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script>
+    const tutorial = [
+      { id: 'overview', title: 'Overview', html: `
+<p>Ready to wrangle some data? Let's get started! 🐼</p>
+<p>Pandas is a powerful Python library for tabular data: read CSVs into <code>DataFrame</code> objects, clean and transform data, compute summary statistics, and visualize with Matplotlib. DataFrames can be hashed to deidentify, merged across sources, and integrated with NumPy and the Python <code>statistics</code> module.</p>` },
+      { id: 'notebook', title: 'Interactive Notebook', html: `
+<p>If you prefer to go wild in the colabs, click below:</p>
+<a href="https://colab.research.google.com/github/naazsibia/ug-trainer/blob/main/tutorial.ipynb" target="_blank"><button>Open in Colab</button></a>
+<p>Or get a static view via nbviewer:</p>
+<iframe src="https://nbviewer.org/github/naazsibia/ug-trainer/blob/main/tutorial.ipynb" width="100%" height="500"></iframe>` },
+      { id: 'simple-ops', title: 'Simple Operations', html: `
+<p>Let's break the ice with simple CSV ops (pun intended). ❄️</p>
+<pre><code class="language-python"># Read and write CSV
+import pandas as pd
+
+df = pd.read_csv('FILENAME.csv')   # load data
+
+df.to_csv('OUTFILE.csv', index=False)  # save data
+</code></pre>` },
+      { id: 'apply-funcs', title: 'Applying Functions', html: `
+<p>Got functions? Let's apply them—just like sunscreen to your data. ☀️</p>
+<pre><code class="language-python"># Define and apply a transformation
+def some_function(value):
+    return value
+
+df['new_col'] = df['existing_col'].apply(some_function)
+</code></pre>` },
+      { id: 'filter-select', title: 'Filtering & Selection', html: `
+<p>Filter like a barista picks beans—get only the best rows. ☕</p>
+<pre><code class="language-python"># Keep rows where score > 80
+df_filtered = df_sample[df_sample['score'] > 80]
+df_filtered
+</code></pre>` },
+      { id: 'missing-data', title: 'Handling Missing Data', html: `
+<p>Missing values? We'll fill the gaps faster than your afternoon snack. 🍪</p>
+<pre><code class="language-python"># Fill missing scores with mean
+df_filled = df_sample.fillna({'score': df_sample['score'].mean()})
+
+# Or drop rows with any missing values
+df_dropped = df_sample.dropna()
+</code></pre>` },
+      { id: 'groupby', title: 'GroupBy & Aggregation', html: `
+<p>Group things up—after all, pandas love to hang out in groups! 🐼</p>
+<pre><code class="language-python"># Merge sample with dept info
+merged = pd.merge(df_sample, df_dept, on='name')
+
+# Compute average score by department
+dept_avg = merged.groupby('department')['score'].mean()
+dept_avg
+</code></pre>` },
+      { id: 'read-formats', title: 'Reading Different Formats', html: `
+<p>Excel-lent and JSON—reading files from every corner. 📂</p>
+<pre><code class="language-python"># Read Excel files
+df_excel = pd.read_excel('file.xlsx', sheet_name='Sheet1')
+
+# Read JSON data
+df_json = pd.read_json('data.json')
+</code></pre>` },
+      { id: 'visualization', title: 'Basic Visualization', html: `
+<p>Show your data some love—plot it like it’s going out of style. 📈</p>
+<pre><code class="language-python"># Plot histogram of scores
+df_sample['score'].hist()  # just one line of code!
+</code></pre>` },
+      { id: 'other-funcs', title: 'Other Useful Functions', html: `
+<p>No toolbox is complete without these classics. 🧰</p>
+<pre><code class="language-python"># Drop columns or rows
+df.drop(..., inplace=True)
+
+# Sort values
+df.sort_values('column_name', inplace=True)
+
+# Rename columns
+df.rename(columns={'old':'new'}, inplace=True)
+
+# Remove duplicates
+df.drop_duplicates(inplace=True)
+
+# Drop missing values
+df.dropna(inplace=True)
+</code></pre>` },
+      { id: 'merge-files', title: 'Merging Two Files', html: `
+<p>Merge like peanut butter and jelly—perfect combos! 🥪</p>
+<pre><code class="language-python"># Load two CSVs
+df1 = pd.read_csv('file1.csv')
+df2 = pd.read_csv('file2.csv')
+
+# Inner join on UTORID
+df = pd.merge(df1, df2, on=['UTORID'], how='inner')
+</code></pre>` },
+      { id: 'resources', title: 'Resources', html: `
+<p>More goodies await—click and explore! 🎁</p>
+<ul>
+  <li><a href="https://pandas.pydata.org/docs/user_guide/10min.html" target="_blank">10 minutes to pandas</a></li>
+  <li><a href="https://pandas.pydata.org/docs/user_guide/index.html" target="_blank">Pandas User Guide</a></li>
+</ul>` }
+    ];
+
+    const nav = document.getElementById('nav');
+    const content = document.getElementById('content');
+
+    tutorial.forEach(secData => {
+      const link = document.createElement('a');
+      link.href = `#${secData.id}`;
+      link.textContent = secData.title;
+      nav.appendChild(link);
+
+      const section = document.createElement('section');
+      section.id = secData.id;
+      section.innerHTML = `<h2>${secData.title}</h2>${secData.html}`;
+      content.appendChild(section);
+    });
+
+    // Initialize Prism syntax highlighting
+    Prism.highlightAll();
+  </script>
+</body>
+</html>
