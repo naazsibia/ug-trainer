@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandas Statistical Analysis & Visualization</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 1rem; line-height: 1.6; background: #fefefe; color: #333; }
+    nav a { margin-right: 1rem; color: #0366d6; text-decoration: none; }
+    section { margin-top: 2rem; }
+    pre { padding: 1rem; overflow-x: auto; white-space: pre; line-height: 1.5; margin-bottom: 1rem; border-radius: 4px; }
+    pre code { background: none; padding: 0; }
+    pre.output { background: #f6f8fa; color: #333; border: 1px solid #ccc; }
+    pre.code-block { background: #2d2d2d; color: #f8f8f2; }
+    code:not([class]) { background: #f6f8fa; padding: 0.2rem 0.4rem; border-radius: 3px; }
+    table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    .example-data { font-size: 0.9rem; margin-bottom: 1rem; }
+    h2 { border-bottom: 2px solid #e1e4e8; padding-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+  <h1>Pandas Statistical Analysis & Visualization</h1>
+  <p>Welcome! This guide walks you through fundamental data analysis techniques using Pandas. Each section presents:</p>
+  <ul>
+    <li><strong>Overview:</strong> A detailed explanation of the method, when to use it, and research questions it can answer.</li>
+    <li><strong>Example dataset:</strong> A small table you can copy into a CSV file.</li>
+    <li><strong>Code snippet:</strong> Pandas commands to perform the analysis.</li>
+    <li><strong>Expected output:</strong> The result you should see when you run the code.</li>
+  </ul>
+  <nav id="nav"></nav>
+  <main id="content"></main>
+  <footer>
+    <p>Hosted on GitHub Pages at naazsibia.github.io/pandas-statistics</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script>
+    const analyses = [
+      {
+        id: 'descriptive',
+        title: 'Descriptive Statistics',
+        html: `
+<p><strong>Overview:</strong> Descriptive statistics provide a first glimpse into your data by summarizing key characteristics like the mean, median, standard deviation, and range. This is essential early in any analysis to answer questions such as:</p>
+<ul>
+  <li>"What is the average score across participants?"</li>
+  <li>"How much variation exists in ages?"</li>
+  <li>"Are there any extreme outliers in my measurements?"</li>
+</ul>
+<p>Use descriptive statistics to identify anomalies, check assumptions before running advanced models, and communicate simple summaries to stakeholders.</p>
+<p class="example-data">Example <code>data.csv</code>:</p>
+<table>
+<tr><th>id</th><th>score</th><th>age</th></tr>
+<tr><td>1</td><td>85</td><td>23</td></tr>
+<tr><td>2</td><td>78</td><td>25</td></tr>
+<tr><td>3</td><td>92</td><td>22</td></tr>
+<tr><td>4</td><td>88</td><td>24</td></tr>
+</table>
+<pre class="code-block"><code class="language-python">import pandas as pd
+
+df = pd.read_csv('data.csv')
+print(df.describe())
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre class="output"><code>
+       id      score        age
+count  4.0   4.000000   4.000000
+mean   2.5  85.750000  23.500000
+std    1.29 5.719498   1.290994
+min    1.0  78.000000  22.000000
+25%    1.75 83.250000 23.000000
+50%    2.5  86.500000 23.500000
+75%    3.25 89.000000 24.000000
+max    4.0  92.000000 25.000000
+</code></pre>`
+      },
+      {
+        id: 'correlation',
+        title: 'Correlation Analysis',
+        html: `
+<p><strong>Overview:</strong> Correlation analysis quantifies the linear relationship between pairs of numeric variables. It helps answer questions like:</p>
+<ul>
+  <li>"Is there an association between age and test score?"</li>
+  <li>"Do two different measurement instruments produce similar results?"</li>
+</ul>
+<p>A correlation coefficient close to +1 indicates a strong positive relationship, -1 indicates a strong negative relationship, and values near 0 suggest little to no linear association. Use correlation to explore potential predictors or check for multicollinearity before modeling.</p>
+<p>Using the same <code>data.csv</code> above:</p>
+<pre class="code-block"><code class="language-python"># Compute correlation matrix
+corr = df.corr()
+print(corr)
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre class="output"><code>
+            id     score      age
+id      1.000000 0.085546  0.085546
+score   0.085546 1.000000 -0.233267
+age     0.085546 -0.233267 1.000000
+</code></pre>`
+      },
+      {
+        id: 'groupby',
+        title: 'GroupBy & Aggregation',
+        html: `
+<p><strong>Overview:</strong> GroupBy allows you to split the dataset into categories and compute summary statistics for each group. Common research questions include:</p>
+<ul>
+  <li>"What is the average grade for each course section?"</li>
+  <li>"How many transactions occurred per customer segment?"</li>
+</ul>
+<p>Aggregation functions (mean, sum, count, std, etc.) can be applied after grouping to compare sub-populations or experimental conditions.</p>
+<p class="example-data">Example <code>grades.csv</code>:</p>
+<table>
+<tr><th>student</th><th>class</th><th>grade</th></tr>
+<tr><td>Alice</td><td>Math</td><td>90</td></tr>
+<tr><td>Bob</td><td>Math</td><td>85</td></tr>
+<tr><td>Alice</td><td>Eng</td><td>88</td></tr>
+<tr><td>Bob</td><td>Eng</td><td>82</td></tr>
+</table>
+<pre class="code-block"><code class="language-python">grades = pd.read_csv('grades.csv')
+# Mean grade per class
+mean_by_class = grades.groupby('class')['grade'].mean()
+print(mean_by_class)
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre class="output"><code>
+class
+Eng     85.0
+Math    87.5
+Name: grade, dtype: float64
+</code></pre>`
+      },
+      {
+        id: 'pivot',
+        title: 'Pivot Tables',
+        html: `
+<p><strong>Overview:</strong> Pivot tables offer flexible reshaping of data to create multi-dimensional summaries. They’re ideal for questions like:</p>
+<ul>
+  <li>"What is the mean grade by student and by subject?"</li>
+  <li>"How do monthly sales compare across product categories?"</li>
+</ul>
+<p>Pivot tables generalize GroupBy & Aggregation by allowing multiple index/column combinations and functions.</p>
+<p>Using <code>grades.csv</code> above:</p>
+<pre class="code-block"><code class="language-python">pivot = pd.pivot_table(
+    grades,
+    values='grade',
+    index='student',
+    columns='class',
+    aggfunc='mean'
+)
+print(pivot)
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre class="output"><code>
+class    Eng  Math
+student           
+Alice   88.0  90.0
+Bob     82.0  85.0
+</code></pre>`
+      },
+      {
+        id: 'timeseries',
+        title: 'Time Series Analysis',
+        html: `
+<p><strong>Overview:</strong> Time series analysis involves handling datetime-indexed data to explore temporal trends. Typical questions include:</p>
+<ul>
+  <li>"How does temperature vary over days or months?"</li>
+  <li>"What is the weekly average of website visits?"</li>
+</ul>
+<p>Resampling aggregates data into different time bins (e.g., daily, monthly), while rolling windows compute metrics over a moving window to smooth short-term fluctuations.</p>
+<p class="example-data">Example <code>temps.csv</code>:</p>
+<table>
+<tr><th>date</th><th>temp</th></tr>
+<tr><td>2025-01-01</td><td>5</td></tr>
+<tr><td>2025-01-02</td><td>7</td></tr>
+<tr><td>2025-01-03</td><td>6</td></tr>
+<tr><td>2025-01-04</td><td>8</td></tr>
+<tr><td>2025-01-05</td><td>4</td></tr>
+</table>
+<pre class="code-block"><code class="language-python">ts = pd.read_csv('temps.csv', parse_dates=['date'], index_col='date')
+# 3-day rolling mean
+rolling = ts['temp'].rolling(window=3).mean()
+print(rolling)
+</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre class="output"><code>
+date
+2025-01-01    NaN
+2025-01-02    6.0
+2025-01-03    6.0
+2025-01-04    7.0
+2025-01-05    6.0
+Name: temp, dtype: float64
+</code></pre>`
+      },
+      {  
+        id: 'visualizations',  
+        title: 'Visualizations',  
+        html: `  
+<p><strong>Overview:</strong> Visualizations convert your data into graphical representations, making patterns, trends, and outliers immediately visible. Effective visuals can answer questions like:</p>  
+<ul>  
+  <li>"What is the shape of the distribution (e.g., normal, skewed, bimodal)?"</li>  
+  <li>"How do metrics compare across categories or groups?"</li>  
+  <li>"What temporal patterns emerge over time?"</li>  
+  <li>"Are there relationships or correlations visible between variables?"</li>  
+</ul>  
+<p><strong>Types of Visualizations:</strong></p>  
+<ul>  
+  <li><strong>Histograms & Density Plots:</strong> Show data distribution; use density for smoother curves.</li>  
+  <li><strong>Box & Violin Plots:</strong> Highlight medians, quartiles, and distribution shape; violin adds kernel density.</li>  
+  <li><strong>Scatter & Bubble Charts:</strong> Visualize relationships between two or three variables; bubbles encode size.</li>  
+  <li><strong>Line & Area Charts:</strong> Ideal for time series; area charts emphasize cumulative values.</li>  
+  <li><strong>Bar & Stacked Bar Charts:</strong> Compare categorical values; stacked bars show part-to-whole.</li>  
+</ul>  
+<p><strong>Accessibility Considerations:</strong></p>  
+<ul>  
+  <li>Use colorblind-friendly palettes (e.g., <code>cmap='tab10'</code> or seaborn's <code>color_palette('colorblind')</code>).</li>  
+  <li>Ensure sufficient contrast between elements and background.</li>  
+  <li>Add axis labels, titles, and legends with clear, descriptive text.</li>  
+  <li>Include tooltips or annotations for interactive use (e.g., Jupyter notebooks with <code>plotly.express</code>).</li>  
+</ul>  
+<p><strong>Modern and Interactive Visualizations:</strong></p>  
+<p>Beyond static Matplotlib, explore libraries for interactivity</p>  
+<ul>  
+  <li><code>plotly.express</code>: Create interactive charts easily; supports hover, zoom, and legend toggling.</li>  
+  <li><code>altair</code>: Grammar-of-graphics approach with built-in interactivity and concise syntax.</li>  
+  <li><code>hvPlot</code>: High-level plotting for Pandas and Dask with interactive backends (Bokeh).</li>  
+</ul>  
+<p><strong>Example Code:</strong></p>  
+<pre class="code-block"><code class="language-python"># Static: histogram of scores with density overlay
+df['score'].plot.hist(density=True, alpha=0.6)
+df['score'].plot.kde()
+
+# Static: box + violin side by side
+import matplotlib.pyplot as plt
+fig, axes = plt.subplots(1, 2, figsize=(8,4))
+df.boxplot(column='score', by='class', ax=axes[0])
+df.groupby('class')['score'].plot(kind='density', ax=axes[1])
+
+# Interactive: scatter with Plotly
+import plotly.express as px
+fig = px.scatter(df, x='age', y='score', color='class', title='Age vs Score')
+fig.show()
+</code></pre>  
+`  
+      }  
+];
+
+    const nav = document.getElementById('nav');
+    const content = document.getElementById('content');
+
+    analyses.forEach(item => {
+      const link = document.createElement('a');
+      link.href = `#${item.id}`;
+      link.textContent = item.title;
+      nav.appendChild(link);
+
+      const section = document.createElement('section');
+      section.id = item.id;
+      section.innerHTML = `<h2>${item.title}</h2>${item.html}`;
+      content.appendChild(section);
+    });
+
+    Prism.highlightAll();
+  </script>
+</body>
+</html>
